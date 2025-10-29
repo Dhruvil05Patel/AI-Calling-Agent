@@ -7,14 +7,18 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch-clients": "node db_fetch.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "dotenv": "^17.2.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwindcss": "^4.1.16"
+    "tailwindcss": "^4.1.16",
+    "pg": "^8.11.0",
+    "axios": "^1.6.0",
+    "@supabase/supabase-js": "^2.30.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
