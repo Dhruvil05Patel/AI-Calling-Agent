@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import dotenv from 'dotenv'
-
-dotenv.config()
 // Production-ready React component to send client JSON to an n8n webhook
 // - Functional components and hooks
 // - Async/await fetch to POST the entire client object
 // - Loading spinner while request is in progress
 // - Toast notifications for success / error
 
-// NOTE: Replace this with your real webhook URL
-const N8N_WEBHOOK_URL = process.env.INITIATE_URL
+// Backend will be triggered via /api/start-calls; see server.js
 
 // Example hardcoded client list (requirement #1)
 const CLIENTS = [
@@ -59,6 +55,7 @@ function Spinner() {
 export default function App() {
   // Tracks whether a bulk send is in progress
   const [loading, setLoading] = useState(false)
+  const [counter, setCounter] = useState({ total: 0, success: 0, lastRun: null, lastUpdate: null })
 
   // Toast state: { visible, message, type }
   const [toast, setToast] = useState({ visible: false, message: '', type: 'info' })
@@ -70,48 +67,40 @@ export default function App() {
     return () => clearTimeout(t)
   }, [toast.visible])
 
-  // Sends full client JSON to the n8n webhook via POST
-  // Uses async/await and proper error handling (requirement #3)
-  // Sends the entire CLIENTS array in one POST to the webhook
+  // Start backend process that runs db_fetch.js and initiates webhook POSTs
   async function startAllCalls() {
-    if (!N8N_WEBHOOK_URL || N8N_WEBHOOK_URL.includes('<your-n8n-domain>')) {
-      setToast({ visible: true, message: 'Please configure N8N_WEBHOOK_URL in App.jsx', type: 'error' })
-      return
-    }
-
     setLoading(true)
     try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Send the full clients array as the POST body
-        body: JSON.stringify(CLIENTS),
-      })
-
-      if (!res.ok) {
-        // Try to get helpful error message from response body
-        let errText
-        try {
-          const errJson = await res.json()
-          errText = errJson?.message || JSON.stringify(errJson)
-        } catch {
-          // ignore JSON parse errors and try to read plain text
-          errText = await res.text()
-        }
-        throw new Error(`Webhook error: ${res.status} ${res.statusText} ${errText}`)
-      }
-
-      // Success
-      setToast({ visible: true, message: 'All calls initiated successfully', type: 'success' })
+      const res = await fetch('/api/start-calls', { method: 'POST' })
+      if (!res.ok) throw new Error(`Failed to start calls: ${res.status}`)
+      setToast({ visible: true, message: 'Started call run', type: 'success' })
     } catch (err) {
-      console.error('Failed to send webhook:', err)
+      console.error('Failed to start calls:', err)
       setToast({ visible: true, message: `Error: ${err.message}`, type: 'error' })
     } finally {
       setLoading(false)
     }
   }
+
+  // Poll counter from backend
+  useEffect(() => {
+    let stop = false
+    async function poll() {
+      try {
+        const res = await fetch('/api/counter')
+        if (res.ok) {
+          const data = await res.json()
+          if (!stop) setCounter(data)
+        }
+      } catch {}
+    }
+    poll()
+    const id = setInterval(poll, 2000)
+    return () => {
+      stop = true
+      clearInterval(id)
+    }
+  }, [])
 
   return (
     <div className="app-root">
@@ -136,9 +125,12 @@ export default function App() {
                 </>
               ) : (
                 // Show number of clients being sent for clarity without exposing details
-                `Start All Calls (${CLIENTS.length})`
+                `Start All Calls (${counter.total || CLIENTS.length})`
               )}
             </button>
+          </div>
+          <div style={{ marginTop: 16, textAlign: 'center' }}>
+            <p><strong>Completed:</strong> {counter.success} / {counter.total}</p>
           </div>
         </section>
       </main>

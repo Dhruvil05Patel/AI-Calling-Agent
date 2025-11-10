@@ -1,4 +1,13 @@
-# Logs
+node_modules/
+dist/
+.vite/
+
+.env
+*.log
+
+data/*.json
+
+.DS_Store
 logs
 *.log
 npm-debug.log*
@@ -29,3 +38,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.early.coverage
+
+clients.json

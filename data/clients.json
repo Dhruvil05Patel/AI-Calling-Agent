@@ -1,28 +1,28 @@
 [
   {
-    "id": "c4d2c130-e153-47ed-98dd-edf64845074c",
-    "name": "Aarya",
-    "phone_number": "919426589465",
-    "email": "xyz@gmail.com",
-    "last_visit": "12 October",
-    "details": "",
-    "update_call_summary": null,
-    "retell_call_id": null,
-    "status": "pending",
-    "created_at": "2025-10-29T16:53:38.730+00:00",
-    "updated_at": "2025-10-29T16:53:38.730+00:00"
+    "id": "dfe2dda2-bf3e-4a2a-a503-807812925929",
+    "name": "Dhruvil",
+    "phone_number": "919925017345",
+    "email": null,
+    "last_visit": null,
+    "details": null,
+    "update_call_summary": "Please provide the call transcript you would like me to summarize. The text provided was empty.",
+    "retell_call_id": "call_b26c90e1d2044ae347001f5ba16",
+    "status": "\"completed\"",
+    "created_at": "2025-11-06T13:15:04.133+00:00",
+    "updated_at": "2025-11-10T10:33:12.339+00:00"
   },
   {
-    "id": "d62a5027-2543-4dd8-911e-8ff42c1c6a58",
-    "name": "Dhurvil Patel",
-    "phone_number": "919925017345",
-    "email": "abc@gmail.com",
-    "last_visit": "14th October",
+    "id": "dacc1981-9de4-4828-876c-f71791eac7dd",
+    "name": "Aarya",
+    "phone_number": "919426589465",
+    "email": null,
+    "last_visit": null,
     "details": null,
-    "update_call_summary": null,
-    "retell_call_id": null,
-    "status": "pending",
-    "created_at": "2025-10-29T16:54:34.732+00:00",
-    "updated_at": "2025-10-29T16:54:34.732+00:00"
+    "update_call_summary": "It appears the call transcript is empty or missing. Please provide the transcript so I can summarize it for you.",
+    "retell_call_id": "call_79cc4eab63a86e6746d17e882b8",
+    "status": "\"completed\"",
+    "created_at": "2025-11-10T10:20:42.816+00:00",
+    "updated_at": "2025-11-10T10:33:13.364+00:00"
   }
 ]

@@ -174,7 +174,10 @@ async function main() {
     console.error('Error during fetch:', err.message || err);
     process.exitCode = 2;
   } finally {
-    await pool.end();
+    // Close pg pool if it was created (not used in Supabase service role mode)
+    if (pool && typeof pool.end === 'function') {
+      await pool.end();
+    }
   }
 }
 
